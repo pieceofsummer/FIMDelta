@@ -1,0 +1,96 @@
+﻿<Window x:Class="FimDelta.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:FimDelta"
+        Title="FIMDelta" Height="480" Width="600">
+  <Window.Resources>
+    <CollectionViewSource x:Key="ObjectsView" xmlns:s="clr-namespace:System.ComponentModel;assembly=WindowsBase" />
+
+    <local:NodeTemplateSelector x:Key="Selector" />
+
+    <BooleanToVisibilityConverter x:Key="b2vConv" />
+
+    <HierarchicalDataTemplate x:Key="ObjectNode" ItemsSource="{Binding ChildNodes, Mode=OneWay}" ItemTemplateSelector="{StaticResource Selector}">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        
+        <CheckBox Grid.Column="0" IsChecked="{Binding Include, Mode=TwoWay}" Margin="3" Focusable="False" IsTabStop="False" />
+        <Image Grid.Column="1" Source="object.png" Width="16" Height="16" Margin="3" />
+        <TextBlock Grid.Column="2" Text="{Binding State}" Margin="3" />
+        <TextBlock Grid.Column="3" Text="{Binding ObjectType}" Margin="3" FontWeight="Bold" />
+        <TextBlock Grid.Column="4" Text="{Binding DisplayName}" Margin="3" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" />
+      </Grid>
+    </HierarchicalDataTemplate>
+
+    <HierarchicalDataTemplate x:Key="AttributeNode" ItemsSource="{Binding ChildNodes, Mode=OneWay}" ItemTemplateSelector="{StaticResource Selector}">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <CheckBox Grid.Column="0" IsChecked="{Binding Include, Mode=TwoWay}" Margin="3" Focusable="False" IsTabStop="False" />
+        <Image Grid.Column="1" Source="property.png" Width="16" Height="16" Margin="3" />
+        <TextBlock Grid.Column="2" Text="{Binding OperationName}" Margin="3" />
+        <TextBlock Grid.Column="3" Text="{Binding AttributeName}" Margin="3" FontWeight="Bold" />
+        <TextBlock Grid.Column="4" Margin="3" Text="{Binding DisplayValue}" ToolTip="{Binding DisplayTooltip}" />
+      </Grid>
+    </HierarchicalDataTemplate>
+
+    <Style x:Key="RefdByText" TargetType="TextBlock">
+      <Setter Property="Text" Value="Referenced By" />
+      <Setter Property="FontWeight" Value="Bold" />
+      <Setter Property="Margin" Value="3" />
+      <Style.Triggers>
+        <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource FindAncestor, AncestorType=TreeViewItem}}" Value="False">
+          <Setter Property="Text" Value="No references" />
+          <Setter Property="Foreground" Value="Gray" />
+        </DataTrigger>
+      </Style.Triggers>
+    </Style>
+
+    <HierarchicalDataTemplate x:Key="RefdByNode" ItemsSource="{Binding ChildNodes, Mode=OneWay}" ItemTemplateSelector="{StaticResource Selector}">
+      <TextBlock Style="{StaticResource RefdByText}" />
+    </HierarchicalDataTemplate>
+
+    <HierarchicalDataTemplate x:Key="GroupByNode" ItemsSource="{Binding ChildNodes, Mode=OneWay}" ItemTemplateSelector="{StaticResource Selector}">
+      <StackPanel Orientation="Horizontal">
+        <CheckBox IsChecked="{Binding Include, Mode=TwoWay}" Margin="3" Focusable="False" IsTabStop="False" />
+        <TextBlock Text="{Binding Name}" Margin="3" FontWeight="Bold" />
+      </StackPanel>
+    </HierarchicalDataTemplate>
+
+  </Window.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+
+    <StackPanel Orientation="Horizontal">
+      <Label>Group by:</Label>
+
+      <ComboBox x:Name="sortBy" SelectionChanged="sortBy_SelectionChanged" SelectedIndex="0" Margin="3">
+        <ComboBoxItem>None</ComboBoxItem>
+        <ComboBoxItem>Operation</ComboBoxItem>
+        <ComboBoxItem>Object Type</ComboBoxItem>
+      </ComboBox>
+
+      <Button Click="Button_Click" Margin="3" Padding="3 1">Save</Button>
+    </StackPanel>
+
+    <TreeView x:Name="tree" Grid.Row="1"
+                  ItemsSource="{Binding Source={StaticResource ObjectsView}}"
+                  ItemTemplateSelector="{StaticResource Selector}">
+    </TreeView>
+  </Grid>
+</Window>

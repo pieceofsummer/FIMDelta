@@ -1,0 +1,7 @@
+*.suo
+*.user
+*.sln.docstates
+bin/
+obj/
+test/
+build/*.xml

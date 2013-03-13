@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FimDelta.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="TargetFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">prod.xml</Value>
+    </Setting>
+    <Setting Name="SourceFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">dev.xml</Value>
+    </Setting>
+    <Setting Name="DeltaFile" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">changes.xml</Value>
+    </Setting>
+    <Setting Name="SaveTo" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">changes2.xml</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
